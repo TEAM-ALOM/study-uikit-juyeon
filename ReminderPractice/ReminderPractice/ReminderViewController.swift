@@ -64,10 +64,11 @@ final class ReminderViewController: UIViewController {
     
     
     //MARK: - 컬렉션뷰
+    let cellTitles: [String] = ["오늘", "예정", "전체", "깃발 표시"]
+    
     private lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
-        
         let collectionView = UICollectionView(frame: .init(), collectionViewLayout: flowLayout)
         collectionView.backgroundColor = .black
         
@@ -79,14 +80,12 @@ final class ReminderViewController: UIViewController {
         textField.placeholder = "검색"
     }()
     
+    
+    //MARK: - viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setUI()
-        
-        collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: "\(CustomCollectionViewCell.self)")
-        collectionView.delegate = self
-        collectionView.dataSource = self
     }
     
     
@@ -97,8 +96,12 @@ final class ReminderViewController: UIViewController {
         self.view.addSubview(navigationBar)
         self.view.addSubview(bottomStackView)
         self.view.addSubview(collectionView)
+        collectionView.register(SectionOneCell.self, forCellWithReuseIdentifier: "\(SectionOneCell.self)")
+        collectionView.delegate = self
+        collectionView.dataSource = self
         
         
+        //MARK: - 오토레이아웃
         let safeArea = self.view.safeAreaLayoutGuide
         
         navigationBar.snp.makeConstraints { make in
@@ -133,21 +136,22 @@ final class ReminderViewController: UIViewController {
 }
 
 
-// MARK: - 컬렉션뷰 확장
+// MARK: - 컬렉션뷰 extension
 extension ReminderViewController: UICollectionViewDataSource {
     //셀 개수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 4
     }
     
-    //셀
+    //셀 생성
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell: CustomCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CustomCollectionViewCell.self)", for: indexPath) as? CustomCollectionViewCell else {
+        guard let cell: SectionOneCell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(SectionOneCell.self)", for: indexPath) as? SectionOneCell else {
             return UICollectionViewCell()
         }
         
         cell.backgroundColor = .gray
         cell.layer.cornerRadius = 10
+        cell.title.text = cellTitles[indexPath.item]
         
         return cell
     }
@@ -160,14 +164,21 @@ extension ReminderViewController: UICollectionViewDelegate {
 }
 
 extension ReminderViewController: UICollectionViewDelegateFlowLayout {
-     //셀사이즈
+     //셀 사이즈 간격 설정
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let collectionViewWidth = collectionView.bounds.width
-        let cellItemForRow: CGFloat = 2
-        let minimumSpacing: CGFloat = 10
 
-        let width = (collectionViewWidth - (cellItemForRow - 1) * minimumSpacing) / cellItemForRow
+        let width = collectionViewWidth / 2.1
+
         let height = width / 1.5
         return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
 }
