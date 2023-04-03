@@ -67,8 +67,17 @@ final class ReminderViewController: UIViewController {
     let cellTitles: [String] = ["오늘", "예정", "전체", "깃발 표시"]
     
     private lazy var collectionView: UICollectionView = {
+        
+        //MARK: - 컬렉션뷰의 flowlayout
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
+        flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
+        flowLayout.minimumLineSpacing = 10
+        flowLayout.minimumInteritemSpacing = 10
+        var screenSize : CGFloat = UIScreen.main.bounds.width
+        flowLayout.itemSize = CGSize(width: screenSize/2 - 20  , height: 100)
+        flowLayout.headerReferenceSize = .init(width: 0, height: 40)
+        
         let collectionView = UICollectionView(frame: .init(), collectionViewLayout: flowLayout)
         collectionView.backgroundColor = .black
         
@@ -76,7 +85,7 @@ final class ReminderViewController: UIViewController {
     }()
     
     private lazy var collectionViewHeader: UITextField = {
-       let textField = UITextField()
+        let textField = UITextField()
         textField.placeholder = "검색"
     }()
     
@@ -96,7 +105,9 @@ final class ReminderViewController: UIViewController {
         self.view.addSubview(navigationBar)
         self.view.addSubview(bottomStackView)
         self.view.addSubview(collectionView)
+        
         collectionView.register(SectionOneCell.self, forCellWithReuseIdentifier: "\(SectionOneCell.self)")
+        collectionView.register(SectionOneHeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionOneHeaderCollectionReusableView.id)
         collectionView.delegate = self
         collectionView.dataSource = self
         
@@ -123,21 +134,27 @@ final class ReminderViewController: UIViewController {
         bottomLefttButton.snp.makeConstraints { make in
             make.trailing.equalTo(bottomStackView).offset(30)
         }
-         
+        
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(navigationBar).offset(40)
-            make.leading.equalTo(safeArea).offset(20)
-            make.trailing.equalTo(safeArea).offset(-20)
-            make.height.equalTo(240)
+            make.leading.equalTo(safeArea)
+            make.trailing.equalTo(safeArea)
+            make.bottom.equalTo(bottomStackView).offset(-40)
         }
         
     }
-
+    
 }
 
 
 // MARK: - 컬렉션뷰 extension
 extension ReminderViewController: UICollectionViewDataSource {
+    
+    //섹션 개수
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    
     //셀 개수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 4
@@ -149,36 +166,34 @@ extension ReminderViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        cell.backgroundColor = .gray
+        cell.backgroundColor = .darkGray
         cell.layer.cornerRadius = 10
         cell.title.text = cellTitles[indexPath.item]
         
         return cell
     }
     
-    
+    //헤더 생성
+    func collectionView( _ collectionView: UICollectionView,viewForSupplementaryElementOfKind kind: String,at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,withReuseIdentifier: SectionOneHeaderCollectionReusableView.id,
+            for: indexPath) as! SectionOneHeaderCollectionReusableView
+            return supplementaryView
+        case UICollectionView.elementKindSectionFooter:
+            let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,withReuseIdentifier: SectionOneHeaderCollectionReusableView.id + "footer",
+            for: indexPath) as! SectionOneHeaderCollectionReusableView
+            return supplementaryView
+        default:
+            return UICollectionReusableView()
+        }
+    }
 }
 
 extension ReminderViewController: UICollectionViewDelegate {
-    //셀 선택시 실행될 동작
+    //셀 선택시 실행될 동작 - 목업화면으로 기능 없음
 }
 
 extension ReminderViewController: UICollectionViewDelegateFlowLayout {
-     //셀 사이즈 간격 설정
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let collectionViewWidth = collectionView.bounds.width
-
-        let width = collectionViewWidth / 2.1
-
-        let height = width / 1.5
-        return CGSize(width: width, height: height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-    }
+    //셀 사이즈 간격 설정 - 컬렉션뷰 생성 클로저에 flowLayout을 설정하는 방법 사용
 }
