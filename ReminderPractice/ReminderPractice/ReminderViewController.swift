@@ -100,7 +100,7 @@ final class ReminderViewController: UIViewController {
         self.view.addSubview(collectionView)
         
         collectionView.register(SectionOneCell.self, forCellWithReuseIdentifier: "\(SectionOneCell.self)")
-        collectionView.register(SectionOneHeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionOneHeaderCollectionReusableView.id)
+        collectionView.register(SectionOneHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionOneHeader.id)
         collectionView.register(SectionTwoCell.self, forCellWithReuseIdentifier: "\(SectionTwoCell.self)")
         collectionView.register(SectionTwoHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionTwoHeader.id)
         collectionView.delegate = self
@@ -193,7 +193,7 @@ extension ReminderViewController: UICollectionViewDataSource {
     //헤더 생성
     func collectionView( _ collectionView: UICollectionView,viewForSupplementaryElementOfKind kind: String,at indexPath: IndexPath) -> UICollectionReusableView {
         if(indexPath.section == 0){
-            let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,withReuseIdentifier: SectionOneHeaderCollectionReusableView.id,for: indexPath) as! SectionOneHeaderCollectionReusableView
+            let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,withReuseIdentifier: SectionOneHeader.id,for: indexPath) as! SectionOneHeader
             return supplementaryView
             
         }
