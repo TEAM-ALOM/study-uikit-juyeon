@@ -64,7 +64,8 @@ final class ReminderViewController: UIViewController {
     
     
     //MARK: - 컬렉션뷰
-    let cellTitles: [String] = ["오늘", "예정", "전체", "깃발 표시"]
+    let sectionOneCellTitle: [String] = ["오늘", "예정", "전체", "깃발 표시"]
+    let sectionTwoCellTitle: [String] = ["미리알림", "St", "Life"]
     
     private lazy var collectionView: UICollectionView = {
         
@@ -74,21 +75,13 @@ final class ReminderViewController: UIViewController {
         flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
         flowLayout.minimumLineSpacing = 10
         flowLayout.minimumInteritemSpacing = 10
-        var screenSize : CGFloat = UIScreen.main.bounds.width
-        flowLayout.itemSize = CGSize(width: screenSize/2 - 20  , height: 100)
-        flowLayout.headerReferenceSize = .init(width: 0, height: 40)
+        flowLayout.headerReferenceSize = .init(width: 0, height: 50)
         
         let collectionView = UICollectionView(frame: .init(), collectionViewLayout: flowLayout)
         collectionView.backgroundColor = .black
         
         return collectionView
     }()
-    
-    private lazy var collectionViewHeader: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "검색"
-    }()
-    
     
     //MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -108,6 +101,8 @@ final class ReminderViewController: UIViewController {
         
         collectionView.register(SectionOneCell.self, forCellWithReuseIdentifier: "\(SectionOneCell.self)")
         collectionView.register(SectionOneHeaderCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionOneHeaderCollectionReusableView.id)
+        collectionView.register(SectionTwoCell.self, forCellWithReuseIdentifier: "\(SectionTwoCell.self)")
+        collectionView.register(SectionTwoHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionTwoHeader.id)
         collectionView.delegate = self
         collectionView.dataSource = self
         
@@ -157,36 +152,58 @@ extension ReminderViewController: UICollectionViewDataSource {
     
     //셀 개수
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        if(section == 0){
+            return sectionOneCellTitle.count
+        }
+        else{
+            return sectionTwoCellTitle.count
+        }
     }
     
     //셀 생성
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell: SectionOneCell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(SectionOneCell.self)", for: indexPath) as? SectionOneCell else {
-            return UICollectionViewCell()
+        if(indexPath.section == 0){
+            
+            guard let cell: SectionOneCell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(SectionOneCell.self)", for: indexPath) as? SectionOneCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.backgroundColor = .darkGray
+            cell.layer.cornerRadius = 10
+            cell.title.text = sectionOneCellTitle[indexPath.item]
+            
+            return cell
+            
         }
-        
-        cell.backgroundColor = .darkGray
-        cell.layer.cornerRadius = 10
-        cell.title.text = cellTitles[indexPath.item]
-        
-        return cell
+        else{
+            guard let cell: SectionTwoCell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(SectionTwoCell.self)", for: indexPath) as? SectionTwoCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.backgroundColor = .darkGray
+            cell.layer.cornerRadius = 10
+            
+            
+            cell.title.text = sectionTwoCellTitle[indexPath.item]
+            
+            return cell
+        }
     }
     
     //헤더 생성
     func collectionView( _ collectionView: UICollectionView,viewForSupplementaryElementOfKind kind: String,at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,withReuseIdentifier: SectionOneHeaderCollectionReusableView.id,
-            for: indexPath) as! SectionOneHeaderCollectionReusableView
+        if(indexPath.section == 0){
+            let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,withReuseIdentifier: SectionOneHeaderCollectionReusableView.id,for: indexPath) as! SectionOneHeaderCollectionReusableView
             return supplementaryView
-        case UICollectionView.elementKindSectionFooter:
-            let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,withReuseIdentifier: SectionOneHeaderCollectionReusableView.id + "footer",
-            for: indexPath) as! SectionOneHeaderCollectionReusableView
-            return supplementaryView
-        default:
-            return UICollectionReusableView()
+            
         }
+        
+        else{
+            let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,withReuseIdentifier: SectionTwoHeader.id,for: indexPath) as! SectionTwoHeader
+            return supplementaryView
+        }
+        
+
     }
 }
 
@@ -196,4 +213,16 @@ extension ReminderViewController: UICollectionViewDelegate {
 
 extension ReminderViewController: UICollectionViewDelegateFlowLayout {
     //셀 사이즈 간격 설정 - 컬렉션뷰 생성 클로저에 flowLayout을 설정하는 방법 사용
+    
+    //셀 크기 설정 - 섹션마다 셀의 크기가 달라야 함으로 여기서 설정(컬렉션뷰 생성 클로저에 flowLayout에서 설정하면 섹션마다 설정불가)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let screenSize : CGFloat = UIScreen.main.bounds.width
+        if(indexPath.section == 0){
+            return CGSize(width: screenSize/2 - 20  , height: 100)
+        }
+        
+        else{
+            return CGSize(width: screenSize - 20  , height: 50)
+        }
+    }
 }

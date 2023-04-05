@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C803CA4429DDAB6D0053473D /* SectionTwoHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803CA4329DDAB6D0053473D /* SectionTwoHeader.swift */; };
+		C803CA4829DDB8370053473D /* SectionTwoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C803CA4729DDB8370053473D /* SectionTwoCell.swift */; };
 		C86E8BD029DABCB0001B8DC8 /* SectionOneHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86E8BCF29DABCB0001B8DC8 /* SectionOneHeaderCollectionReusableView.swift */; };
 		C8ED340329D955BA00CA9286 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8ED340229D955BA00CA9286 /* AppDelegate.swift */; };
 		C8ED340529D955BA00CA9286 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8ED340429D955BA00CA9286 /* SceneDelegate.swift */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C803CA4329DDAB6D0053473D /* SectionTwoHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionTwoHeader.swift; sourceTree = "<group>"; };
+		C803CA4729DDB8370053473D /* SectionTwoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionTwoCell.swift; sourceTree = "<group>"; };
 		C86E8BCF29DABCB0001B8DC8 /* SectionOneHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionOneHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
 		C8ED33FF29D955BA00CA9286 /* ReminderPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReminderPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8ED340229D955BA00CA9286 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -63,7 +67,9 @@
 				C8ED340229D955BA00CA9286 /* AppDelegate.swift */,
 				C8ED340429D955BA00CA9286 /* SceneDelegate.swift */,
 				C8ED340629D955BA00CA9286 /* ReminderViewController.swift */,
+				C803CA4329DDAB6D0053473D /* SectionTwoHeader.swift */,
 				C8F7E68C29D9969A0004CC43 /* SectionOneCell.swift */,
+				C803CA4729DDB8370053473D /* SectionTwoCell.swift */,
 				C86E8BCF29DABCB0001B8DC8 /* SectionOneHeaderCollectionReusableView.swift */,
 				C8ED340B29D955BB00CA9286 /* Assets.xcassets */,
 				C8ED340D29D955BB00CA9286 /* LaunchScreen.storyboard */,
@@ -148,7 +154,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C803CA4829DDB8370053473D /* SectionTwoCell.swift in Sources */,
 				C86E8BD029DABCB0001B8DC8 /* SectionOneHeaderCollectionReusableView.swift in Sources */,
+				C803CA4429DDAB6D0053473D /* SectionTwoHeader.swift in Sources */,
 				C8ED340729D955BA00CA9286 /* ReminderViewController.swift in Sources */,
 				C8ED340329D955BA00CA9286 /* AppDelegate.swift in Sources */,
 				C8F7E68D29D9969A0004CC43 /* SectionOneCell.swift in Sources */,
