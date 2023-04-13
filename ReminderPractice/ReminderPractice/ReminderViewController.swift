@@ -29,7 +29,6 @@ final class ReminderViewController: UIViewController {
         return navigationBar
     }()
     
-    
     //MARK: - 바텀뷰 (H스택)
     private lazy var bottomRightButton : UIButton = {
         let button = UIButton()
@@ -64,8 +63,14 @@ final class ReminderViewController: UIViewController {
     
     
     //MARK: - 컬렉션뷰
+    
+    //컬렉션뷰 목업 데이터
     let sectionOneCellTitle: [String] = ["오늘", "예정", "전체", "깃발 표시"]
+    let sectionOneCellIcon: [UIImage?] = [UIImage(systemName: "calendar.circle.fill"),UIImage(systemName: "calendar.circle.fill"),UIImage(systemName: "tray.circle.fill"),UIImage(systemName: "flag.circle.fill")]
+    let sectionOneCellColor: [UIColor] = [.systemBlue, .red, .systemGray,.orange]
     let sectionTwoCellTitle: [String] = ["미리알림", "St", "Life"]
+    let sectionTwoCellIcon: [UIImage?] = [UIImage(systemName: "book.closed.circle.fill"),UIImage(systemName: "graduationcap.circle.fill"),UIImage(systemName: "house.circle.fill")]
+    let sectionTwoCellColor: [UIColor] = [.orange, .green,.magenta]
     
     private lazy var collectionView: UICollectionView = {
         
@@ -78,6 +83,10 @@ final class ReminderViewController: UIViewController {
         flowLayout.headerReferenceSize = .init(width: 0, height: 50)
         
         let collectionView = UICollectionView(frame: .init(), collectionViewLayout: flowLayout)
+        collectionView.register(SectionOneCell.self, forCellWithReuseIdentifier: "\(SectionOneCell.self)")
+        collectionView.register(SectionOneHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionOneHeader.id)
+        collectionView.register(SectionTwoCell.self, forCellWithReuseIdentifier: "\(SectionTwoCell.self)")
+        collectionView.register(SectionTwoHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionTwoHeader.id)
         collectionView.backgroundColor = .black
         
         return collectionView
@@ -99,13 +108,8 @@ final class ReminderViewController: UIViewController {
         self.view.addSubview(bottomStackView)
         self.view.addSubview(collectionView)
         
-        collectionView.register(SectionOneCell.self, forCellWithReuseIdentifier: "\(SectionOneCell.self)")
-        collectionView.register(SectionOneHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionOneHeader.id)
-        collectionView.register(SectionTwoCell.self, forCellWithReuseIdentifier: "\(SectionTwoCell.self)")
-        collectionView.register(SectionTwoHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SectionTwoHeader.id)
         collectionView.delegate = self
         collectionView.dataSource = self
-        
         
         //MARK: - 오토레이아웃
         let safeArea = self.view.safeAreaLayoutGuide
@@ -138,11 +142,12 @@ final class ReminderViewController: UIViewController {
         }
         
     }
+        
     
 }
 
 
-// MARK: - 컬렉션뷰 extension
+// MARK: - 컬렉션뷰관련 프로토콜 채택
 extension ReminderViewController: UICollectionViewDataSource {
     
     //섹션 개수
@@ -171,6 +176,8 @@ extension ReminderViewController: UICollectionViewDataSource {
             cell.backgroundColor = .darkGray
             cell.layer.cornerRadius = 10
             cell.title.text = sectionOneCellTitle[indexPath.item]
+            cell.icon.image = sectionOneCellIcon[indexPath.item]
+            cell.icon.tintColor = sectionOneCellColor[indexPath.item]
             
             return cell
             
@@ -185,6 +192,9 @@ extension ReminderViewController: UICollectionViewDataSource {
             
             
             cell.title.text = sectionTwoCellTitle[indexPath.item]
+            cell.title.text = sectionTwoCellTitle[indexPath.item]
+            cell.icon.image = sectionTwoCellIcon[indexPath.item]
+            cell.icon.tintColor = sectionTwoCellColor[indexPath.item]
             
             return cell
         }
@@ -195,15 +205,12 @@ extension ReminderViewController: UICollectionViewDataSource {
         if(indexPath.section == 0){
             let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,withReuseIdentifier: SectionOneHeader.id,for: indexPath) as! SectionOneHeader
             return supplementaryView
-            
         }
         
         else{
             let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,withReuseIdentifier: SectionTwoHeader.id,for: indexPath) as! SectionTwoHeader
             return supplementaryView
         }
-        
-
     }
 }
 
@@ -212,7 +219,7 @@ extension ReminderViewController: UICollectionViewDelegate {
 }
 
 extension ReminderViewController: UICollectionViewDelegateFlowLayout {
-    //셀 사이즈 간격 설정 - 컬렉션뷰 생성 클로저에 flowLayout을 설정하는 방법 사용
+    //셀 사이즈 간격 설정 - 간격은 컬렉션뷰 생성 클로저에 flowLayout을 설정하는 방법 사용
     
     //셀 크기 설정 - 섹션마다 셀의 크기가 달라야 함으로 여기서 설정(컬렉션뷰 생성 클로저에 flowLayout에서 설정하면 섹션마다 설정불가)
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
