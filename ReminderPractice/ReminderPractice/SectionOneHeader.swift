@@ -8,7 +8,6 @@
 import UIKit
 
 final class SectionOneHeader: UICollectionReusableView{
-    
     static let id = "SectionOneHeaderCollectionReusableView"
     
     private let searchBar : UITextField = {

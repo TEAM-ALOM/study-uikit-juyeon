@@ -26,11 +26,17 @@ class SectionOneCell: UICollectionViewCell {
         return title
     }()
     
+    var icon : UIImageView = {
+        var image = UIImageView()
+        return image
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         view.addSubview(count)
         view.addSubview(title)
+        view.addSubview(icon)
         self.contentView.addSubview(view)
         
         count.snp.makeConstraints { make in
@@ -42,6 +48,14 @@ class SectionOneCell: UICollectionViewCell {
             make.leading.equalTo(view).offset(10)
             make.bottom.equalTo(view).offset(-5)
         }
+        
+        icon.snp.makeConstraints { make in
+            make.leading.equalTo(view).offset(10)
+            make.top.equalTo(view).offset(15)
+            make.width.equalTo(50)
+            make.height.equalTo(50)
+        }
+        
         view.snp.makeConstraints { make in
             make.centerX.equalTo(contentView)
             make.centerY.equalTo(contentView)
